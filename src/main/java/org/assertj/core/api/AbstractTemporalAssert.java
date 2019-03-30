@@ -114,7 +114,6 @@ public abstract class AbstractTemporalAssert<SELF extends AbstractTemporalAssert
    */
   protected abstract TEMPORAL parse(String temporalAsString);
 
-
   /** {@inheritDoc} */
   @Override
   @CheckReturnValue
