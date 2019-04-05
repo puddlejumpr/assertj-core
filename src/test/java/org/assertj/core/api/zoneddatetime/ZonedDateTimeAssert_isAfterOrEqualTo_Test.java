@@ -13,6 +13,8 @@
 package org.assertj.core.api.zoneddatetime;
 
 import static java.time.ZoneOffset.UTC;
+import static org.assertj.core.api.AbstractZonedDateTimeAssert.BY_INSTANT;
+import static org.assertj.core.api.AbstractZonedDateTimeAssert.COMPARATOR_DESC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
@@ -23,6 +25,7 @@ import static org.assertj.core.util.FailureMessages.actualIsNull;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+import org.assertj.core.internal.ComparatorBasedComparisonStrategy;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -57,8 +60,9 @@ public class ZonedDateTimeAssert_isAfterOrEqualTo_Test extends ZonedDateTimeAsse
 
   @Test
   public void test_isAfterOrEqual_assertion_error_message() {
+    ComparatorBasedComparisonStrategy strategy = new ComparatorBasedComparisonStrategy(BY_INSTANT, COMPARATOR_DESC);
     assertThatExceptionOfType(AssertionError.class).isThrownBy(() -> assertThat(REFERENCE).isAfterOrEqualTo(AFTER))
-                                                   .withMessage(shouldBeAfterOrEqualTo(REFERENCE, AFTER).create());
+                                                   .withMessage(shouldBeAfterOrEqualTo(REFERENCE, AFTER, strategy).create());
   }
 
   @Test
