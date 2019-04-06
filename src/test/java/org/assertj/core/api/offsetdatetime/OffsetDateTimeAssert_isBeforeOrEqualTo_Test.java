@@ -17,8 +17,6 @@ import org.assertj.core.internal.ComparatorBasedComparisonStrategy;
 import static java.lang.String.format;
 import static java.time.OffsetDateTime.of;
 import static java.time.ZoneOffset.UTC;
-import static org.assertj.core.api.AbstractOffsetDateTimeAssert.BY_INSTANT;
-import static org.assertj.core.api.AbstractOffsetDateTimeAssert.COMPARATOR_DESC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
@@ -27,7 +25,9 @@ import static org.assertj.core.error.ShouldBeBeforeOrEqualTo.shouldBeBeforeOrEqu
 import static org.assertj.core.util.FailureMessages.actualIsNull;
 
 import java.time.OffsetDateTime;
+import java.util.Comparator;
 
+import org.assertj.core.util.temporal.DefaultOffsetDateTimeComparator;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -50,7 +50,8 @@ public class OffsetDateTimeAssert_isBeforeOrEqualTo_Test extends OffsetDateTimeA
 
   @Test
   public void test_isBeforeOrEqual_assertion_error_message() {
-    ComparatorBasedComparisonStrategy strategy = new ComparatorBasedComparisonStrategy(BY_INSTANT, COMPARATOR_DESC);
+    Comparator<OffsetDateTime> comparator = DefaultOffsetDateTimeComparator.getInstance();
+    ComparatorBasedComparisonStrategy strategy = new ComparatorBasedComparisonStrategy(comparator, comparator.toString());
     assertThatExceptionOfType(AssertionError.class).isThrownBy(() -> assertThat(REFERENCE).isBeforeOrEqualTo(BEFORE))
                                                    .withMessage(shouldBeBeforeOrEqualTo(REFERENCE, BEFORE, strategy).create());
   }
