@@ -12,6 +12,13 @@
  */
 package org.assertj.core.api.offsetdatetime;
 
+import org.assertj.core.internal.ComparatorBasedComparisonStrategy;
+
+import static java.lang.String.format;
+import static java.time.OffsetDateTime.of;
+import static java.time.ZoneOffset.UTC;
+import static org.assertj.core.api.AbstractOffsetDateTimeAssert.BY_INSTANT;
+import static org.assertj.core.api.AbstractOffsetDateTimeAssert.COMPARATOR_DESC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
@@ -43,8 +50,9 @@ public class OffsetDateTimeAssert_isBeforeOrEqualTo_Test extends OffsetDateTimeA
 
   @Test
   public void test_isBeforeOrEqual_assertion_error_message() {
+    ComparatorBasedComparisonStrategy strategy = new ComparatorBasedComparisonStrategy(BY_INSTANT, COMPARATOR_DESC);
     assertThatExceptionOfType(AssertionError.class).isThrownBy(() -> assertThat(REFERENCE).isBeforeOrEqualTo(BEFORE))
-                                                   .withMessage(shouldBeBeforeOrEqualTo(REFERENCE, BEFORE).create());
+                                                   .withMessage(shouldBeBeforeOrEqualTo(REFERENCE, BEFORE, strategy).create());
   }
 
   @Test

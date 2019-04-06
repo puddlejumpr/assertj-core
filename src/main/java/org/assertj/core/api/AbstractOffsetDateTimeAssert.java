@@ -14,10 +14,6 @@ package org.assertj.core.api;
 
 import static java.time.Clock.systemUTC;
 import static java.time.OffsetDateTime.now;
-import static org.assertj.core.error.ShouldBeAfter.shouldBeAfter;
-import static org.assertj.core.error.ShouldBeAfterOrEqualTo.shouldBeAfterOrEqualTo;
-import static org.assertj.core.error.ShouldBeBefore.shouldBeBefore;
-import static org.assertj.core.error.ShouldBeBeforeOrEqualTo.shouldBeBeforeOrEqualTo;
 import static org.assertj.core.error.ShouldBeEqualIgnoringHours.shouldBeEqualIgnoringHours;
 import static org.assertj.core.error.ShouldBeEqualIgnoringMinutes.shouldBeEqualIgnoringMinutes;
 import static org.assertj.core.error.ShouldBeEqualIgnoringNanos.shouldBeEqualIgnoringNanos;
@@ -28,10 +24,14 @@ import static org.assertj.core.util.Preconditions.checkArgument;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalUnit;
+import java.util.Comparator;
 
 import org.assertj.core.data.TemporalUnitOffset;
+import org.assertj.core.internal.Comparables;
+import org.assertj.core.internal.ComparatorBasedComparisonStrategy;
 import org.assertj.core.internal.Failures;
 import org.assertj.core.internal.Objects;
+import org.assertj.core.util.CheckReturnValue;
 
 /**
  * Assertions for {@link java.time.OffsetDateTime} type from new Date &amp; Time API introduced in Java 8.
@@ -46,7 +46,10 @@ import org.assertj.core.internal.Objects;
 public abstract class AbstractOffsetDateTimeAssert<SELF extends AbstractOffsetDateTimeAssert<SELF>> extends
     AbstractTemporalAssert<SELF, OffsetDateTime> {
 
+  public static final Comparator<OffsetDateTime> BY_INSTANT = Comparator.comparing(OffsetDateTime::toInstant);
+
   public static final String NULL_OFFSET_DATE_TIME_PARAMETER_MESSAGE = "The OffsetDateTime to compare actual with should not be null";
+  public static final String COMPARATOR_DESC = "instant comparator";
 
   /**
    * Creates a new <code>{@link org.assertj.core.api.AbstractOffsetDateTimeAssert}</code>.
@@ -56,6 +59,7 @@ public abstract class AbstractOffsetDateTimeAssert<SELF extends AbstractOffsetDa
    */
   protected AbstractOffsetDateTimeAssert(OffsetDateTime actual, Class<?> selfType) {
     super(actual, selfType);
+    comparables = buildDefaultComparables();
   }
 
   /**
@@ -73,9 +77,7 @@ public abstract class AbstractOffsetDateTimeAssert<SELF extends AbstractOffsetDa
   public SELF isBefore(OffsetDateTime other) {
     Objects.instance().assertNotNull(info, actual);
     assertOffsetDateTimeParameterIsNotNull(other);
-    if (!actual.isBefore(other)) {
-      throw Failures.instance().failure(info, shouldBeBefore(actual, other));
-    }
+    comparables.assertIsBefore(info, actual, other);
     return myself;
   }
 
@@ -120,9 +122,7 @@ public abstract class AbstractOffsetDateTimeAssert<SELF extends AbstractOffsetDa
   public SELF isBeforeOrEqualTo(OffsetDateTime other) {
     Objects.instance().assertNotNull(info, actual);
     assertOffsetDateTimeParameterIsNotNull(other);
-    if (actual.isAfter(other)) {
-      throw Failures.instance().failure(info, shouldBeBeforeOrEqualTo(actual, other));
-    }
+    comparables.assertIsBeforeOrEqualTo(info, actual, other);
     return myself;
   }
 
@@ -167,9 +167,7 @@ public abstract class AbstractOffsetDateTimeAssert<SELF extends AbstractOffsetDa
   public SELF isAfterOrEqualTo(OffsetDateTime other) {
     Objects.instance().assertNotNull(info, actual);
     assertOffsetDateTimeParameterIsNotNull(other);
-    if (actual.isBefore(other)) {
-      throw Failures.instance().failure(info, shouldBeAfterOrEqualTo(actual, other));
-    }
+    comparables.assertIsAfterOrEqualTo(info, actual, other);
     return myself;
   }
 
@@ -213,9 +211,7 @@ public abstract class AbstractOffsetDateTimeAssert<SELF extends AbstractOffsetDa
   public SELF isAfter(OffsetDateTime other) {
     Objects.instance().assertNotNull(info, actual);
     assertOffsetDateTimeParameterIsNotNull(other);
-    if (!actual.isAfter(other)) {
-      throw Failures.instance().failure(info, shouldBeAfter(actual, other));
-    }
+    comparables.assertIsAfter(info, actual, other);
     return myself;
   }
 
@@ -241,6 +237,15 @@ public abstract class AbstractOffsetDateTimeAssert<SELF extends AbstractOffsetDa
   public SELF isAfter(String offsetDateTimeAsString) {
     assertOffsetDateTimeAsStringParameterIsNotNull(offsetDateTimeAsString);
     return isAfter(parse(offsetDateTimeAsString));
+  }
+
+  public SELF isEqualTo(OffsetDateTime expected) {
+    if (actual == null || expected == null) {
+      super.isEqualTo(expected);
+    } else {
+      comparables.assertEqual(info, actual, expected);
+    }
+    return myself;
   }
 
   /**
@@ -291,6 +296,15 @@ public abstract class AbstractOffsetDateTimeAssert<SELF extends AbstractOffsetDa
   public SELF isEqualTo(String dateTimeAsString) {
     assertOffsetDateTimeAsStringParameterIsNotNull(dateTimeAsString);
     return isEqualTo(parse(dateTimeAsString));
+  }
+
+  public SELF isNotEqualTo(OffsetDateTime expected) {
+    if (actual == null || expected == null) {
+      super.isNotEqualTo(expected);
+    } else {
+      comparables.assertNotEqual(info, actual, expected);
+    }
+    return myself;
   }
 
   /**
@@ -669,6 +683,19 @@ public abstract class AbstractOffsetDateTimeAssert<SELF extends AbstractOffsetDa
    */
   public SELF isStrictlyBetween(String startExclusive, String endExclusive) {
     return isStrictlyBetween(parse(startExclusive), parse(endExclusive));
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  @CheckReturnValue
+  public SELF usingDefaultComparator() {
+    SELF self = super.usingDefaultComparator();
+    self.comparables = buildDefaultComparables();
+    return self;
+  }
+
+  private Comparables buildDefaultComparables() {
+    return new Comparables(new ComparatorBasedComparisonStrategy(BY_INSTANT, COMPARATOR_DESC));
   }
 
   /**
