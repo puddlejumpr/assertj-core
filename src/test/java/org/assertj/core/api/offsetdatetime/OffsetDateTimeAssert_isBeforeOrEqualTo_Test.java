@@ -27,7 +27,7 @@ import static org.assertj.core.util.FailureMessages.actualIsNull;
 import java.time.OffsetDateTime;
 import java.util.Comparator;
 
-import org.assertj.core.util.temporal.DefaultOffsetDateTimeComparator;
+import org.assertj.core.internal.OffsetDateTimeByInstantComparator;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -50,8 +50,8 @@ public class OffsetDateTimeAssert_isBeforeOrEqualTo_Test extends OffsetDateTimeA
 
   @Test
   public void test_isBeforeOrEqual_assertion_error_message() {
-    Comparator<OffsetDateTime> comparator = DefaultOffsetDateTimeComparator.getInstance();
-    ComparatorBasedComparisonStrategy strategy = new ComparatorBasedComparisonStrategy(comparator, comparator.toString());
+    OffsetDateTimeByInstantComparator comparator = OffsetDateTimeByInstantComparator.getInstance();
+    ComparatorBasedComparisonStrategy strategy = new ComparatorBasedComparisonStrategy(comparator, comparator.description());
     assertThatExceptionOfType(AssertionError.class).isThrownBy(() -> assertThat(REFERENCE).isBeforeOrEqualTo(BEFORE))
                                                    .withMessage(shouldBeBeforeOrEqualTo(REFERENCE, BEFORE, strategy).create());
   }

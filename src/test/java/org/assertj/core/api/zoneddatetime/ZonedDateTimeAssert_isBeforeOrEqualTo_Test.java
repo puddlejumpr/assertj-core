@@ -22,11 +22,9 @@ import static org.assertj.core.util.FailureMessages.actualIsNull;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.time.chrono.ChronoZonedDateTime;
-import java.util.Comparator;
 
 import org.assertj.core.internal.ComparatorBasedComparisonStrategy;
-import org.assertj.core.util.temporal.DefaultZonedDateTimeComparator;
+import org.assertj.core.internal.ChronoZonedDateTimeByInstantComparator;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -61,8 +59,8 @@ public class ZonedDateTimeAssert_isBeforeOrEqualTo_Test extends ZonedDateTimeAss
 
   @Test
   public void test_isBeforeOrEqual_assertion_error_message() {
-    Comparator<ChronoZonedDateTime> comparator = DefaultZonedDateTimeComparator.getInstance();
-    ComparatorBasedComparisonStrategy strategy = new ComparatorBasedComparisonStrategy(comparator, comparator.toString());
+    ChronoZonedDateTimeByInstantComparator comparator = ChronoZonedDateTimeByInstantComparator.getInstance();
+    ComparatorBasedComparisonStrategy strategy = new ComparatorBasedComparisonStrategy(comparator, comparator.description());
     assertThatExceptionOfType(AssertionError.class).isThrownBy(() -> assertThat(REFERENCE).isBeforeOrEqualTo(BEFORE))
                                                    .withMessage(shouldBeBeforeOrEqualTo(REFERENCE, BEFORE, strategy).create());
   }

@@ -20,10 +20,9 @@ import static org.assertj.core.error.ShouldBeAfterOrEqualTo.shouldBeAfterOrEqual
 import static org.assertj.core.util.FailureMessages.actualIsNull;
 
 import java.time.OffsetDateTime;
-import java.util.Comparator;
 
 import org.assertj.core.internal.ComparatorBasedComparisonStrategy;
-import org.assertj.core.util.temporal.DefaultOffsetDateTimeComparator;
+import org.assertj.core.internal.OffsetDateTimeByInstantComparator;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -46,8 +45,8 @@ public class OffsetDateTimeAssert_isAfterOrEqualTo_Test extends OffsetDateTimeAs
 
   @Test
   public void test_isAfterOrEqual_assertion_error_message() {
-    Comparator<OffsetDateTime> comparator = DefaultOffsetDateTimeComparator.getInstance();
-    ComparatorBasedComparisonStrategy strategy = new ComparatorBasedComparisonStrategy(comparator, comparator.toString());
+    OffsetDateTimeByInstantComparator comparator = OffsetDateTimeByInstantComparator.getInstance();
+    ComparatorBasedComparisonStrategy strategy = new ComparatorBasedComparisonStrategy(comparator, comparator.description());
     assertThatExceptionOfType(AssertionError.class).isThrownBy(() -> assertThat(REFERENCE).isAfterOrEqualTo(AFTER))
                                                    .withMessage(shouldBeAfterOrEqualTo(REFERENCE, AFTER, strategy).create());
   }

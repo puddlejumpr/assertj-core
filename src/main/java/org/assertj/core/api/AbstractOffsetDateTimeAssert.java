@@ -24,15 +24,14 @@ import static org.assertj.core.util.Preconditions.checkArgument;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalUnit;
-import java.util.Comparator;
 
 import org.assertj.core.data.TemporalUnitOffset;
 import org.assertj.core.internal.Comparables;
 import org.assertj.core.internal.ComparatorBasedComparisonStrategy;
 import org.assertj.core.internal.Failures;
 import org.assertj.core.internal.Objects;
+import org.assertj.core.internal.OffsetDateTimeByInstantComparator;
 import org.assertj.core.util.CheckReturnValue;
-import org.assertj.core.util.temporal.DefaultOffsetDateTimeComparator;
 
 /**
  * Assertions for {@link java.time.OffsetDateTime} type from new Date &amp; Time API introduced in Java 8.
@@ -693,9 +692,8 @@ public abstract class AbstractOffsetDateTimeAssert<SELF extends AbstractOffsetDa
   }
 
   private Comparables buildDefaultComparables() {
-    Comparator<OffsetDateTime> defaultComparator = DefaultOffsetDateTimeComparator.getInstance();
-    String description = defaultComparator.toString();
-    return new Comparables(new ComparatorBasedComparisonStrategy(defaultComparator, description));
+    OffsetDateTimeByInstantComparator defaultComparator = OffsetDateTimeByInstantComparator.getInstance();
+    return new Comparables(new ComparatorBasedComparisonStrategy(defaultComparator, defaultComparator.description()));
   }
 
   /**
