@@ -21,6 +21,8 @@ import static org.assertj.core.util.FailureMessages.actualIsNull;
 
 import java.time.LocalDateTime;
 
+import org.assertj.core.internal.ChronoLocalDateTimeComparator;
+import org.assertj.core.internal.ComparatorBasedComparisonStrategy;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -41,8 +43,10 @@ public class LocalDateTimeAssert_isBeforeOrEqualTo_Test extends LocalDateTimeAss
 
   @Test
   public void test_isBeforeOrEqual_assertion_error_message() {
+    ChronoLocalDateTimeComparator comparator = ChronoLocalDateTimeComparator.getInstance();
+    ComparatorBasedComparisonStrategy strategy = new ComparatorBasedComparisonStrategy(comparator, comparator.description());
     assertThatExceptionOfType(AssertionError.class).isThrownBy(() -> assertThat(REFERENCE).isBeforeOrEqualTo(BEFORE))
-                                                   .withMessage(shouldBeBeforeOrEqualTo(REFERENCE, BEFORE).create());
+                                                   .withMessage(shouldBeBeforeOrEqualTo(REFERENCE, BEFORE, strategy).create());
   }
 
   @Test

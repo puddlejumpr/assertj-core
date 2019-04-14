@@ -14,10 +14,6 @@ package org.assertj.core.api;
 
 import static java.time.Clock.systemUTC;
 import static java.time.LocalDateTime.now;
-import static org.assertj.core.error.ShouldBeAfter.shouldBeAfter;
-import static org.assertj.core.error.ShouldBeAfterOrEqualTo.shouldBeAfterOrEqualTo;
-import static org.assertj.core.error.ShouldBeBefore.shouldBeBefore;
-import static org.assertj.core.error.ShouldBeBeforeOrEqualTo.shouldBeBeforeOrEqualTo;
 import static org.assertj.core.error.ShouldBeEqualIgnoringHours.shouldBeEqualIgnoringHours;
 import static org.assertj.core.error.ShouldBeEqualIgnoringMinutes.shouldBeEqualIgnoringMinutes;
 import static org.assertj.core.error.ShouldBeEqualIgnoringNanos.shouldBeEqualIgnoringNanos;
@@ -30,8 +26,12 @@ import java.time.temporal.TemporalUnit;
 import java.util.Arrays;
 
 import org.assertj.core.data.TemporalUnitOffset;
+import org.assertj.core.internal.ChronoLocalDateTimeComparator;
+import org.assertj.core.internal.Comparables;
+import org.assertj.core.internal.ComparatorBasedComparisonStrategy;
 import org.assertj.core.internal.Failures;
 import org.assertj.core.internal.Objects;
+import org.assertj.core.util.CheckReturnValue;
 
 /**
  * Assertions for {@link LocalDateTime} type from new Date &amp; Time API introduced in Java 8.
@@ -56,6 +56,7 @@ public abstract class AbstractLocalDateTimeAssert<SELF extends AbstractLocalDate
    */
   protected AbstractLocalDateTimeAssert(LocalDateTime actual, Class<?> selfType) {
     super(actual, selfType);
+    this.comparables = buildDefaultComparables();
   }
 
   /**
@@ -73,9 +74,7 @@ public abstract class AbstractLocalDateTimeAssert<SELF extends AbstractLocalDate
   public SELF isBefore(LocalDateTime other) {
     Objects.instance().assertNotNull(info, actual);
     assertLocalDateTimeParameterIsNotNull(other);
-    if (!actual.isBefore(other)) {
-      throw Failures.instance().failure(info, shouldBeBefore(actual, other));
-    }
+    comparables.assertIsBefore(info, actual, other);
     return myself;
   }
 
@@ -117,9 +116,7 @@ public abstract class AbstractLocalDateTimeAssert<SELF extends AbstractLocalDate
   public SELF isBeforeOrEqualTo(LocalDateTime other) {
     Objects.instance().assertNotNull(info, actual);
     assertLocalDateTimeParameterIsNotNull(other);
-    if (actual.isAfter(other)) {
-      throw Failures.instance().failure(info, shouldBeBeforeOrEqualTo(actual, other));
-    }
+    comparables.assertIsBeforeOrEqualTo(info, actual, other);
     return myself;
   }
 
@@ -162,9 +159,7 @@ public abstract class AbstractLocalDateTimeAssert<SELF extends AbstractLocalDate
   public SELF isAfterOrEqualTo(LocalDateTime other) {
     Objects.instance().assertNotNull(info, actual);
     assertLocalDateTimeParameterIsNotNull(other);
-    if (actual.isBefore(other)) {
-      throw Failures.instance().failure(info, shouldBeAfterOrEqualTo(actual, other));
-    }
+    comparables.assertIsAfterOrEqualTo(info, actual, other);
     return myself;
   }
 
@@ -206,9 +201,7 @@ public abstract class AbstractLocalDateTimeAssert<SELF extends AbstractLocalDate
   public SELF isAfter(LocalDateTime other) {
     Objects.instance().assertNotNull(info, actual);
     assertLocalDateTimeParameterIsNotNull(other);
-    if (!actual.isAfter(other)) {
-      throw Failures.instance().failure(info, shouldBeAfter(actual, other));
-    }
+    comparables.assertIsAfter(info, actual, other);
     return myself;
   }
 
@@ -234,6 +227,15 @@ public abstract class AbstractLocalDateTimeAssert<SELF extends AbstractLocalDate
     return isAfter(parse(localDateTimeAsString));
   }
 
+  public SELF isEqualTo(LocalDateTime expected) {
+    if (actual == null || expected == null) {
+      super.isEqualTo(expected);
+    } else {
+      comparables.assertEqual(info, actual, expected);
+    }
+    return myself;
+  }
+
   /**
    * Same assertion as {@link #isEqualTo(Object)} (where Object is expected to be {@link LocalDateTime}) but here you
    * pass {@link LocalDateTime} String representation that must follow <a href=
@@ -254,6 +256,15 @@ public abstract class AbstractLocalDateTimeAssert<SELF extends AbstractLocalDate
   public SELF isEqualTo(String dateTimeAsString) {
     assertLocalDateTimeAsStringParameterIsNotNull(dateTimeAsString);
     return isEqualTo(parse(dateTimeAsString));
+  }
+
+  public SELF isNotEqualTo(LocalDateTime expected) {
+    if (actual == null || expected == null) {
+      super.isNotEqualTo(expected);
+    } else {
+      comparables.assertNotEqual(info, actual, expected);
+    }
+    return myself;
   }
 
   /**
@@ -346,6 +357,20 @@ public abstract class AbstractLocalDateTimeAssert<SELF extends AbstractLocalDate
    */
   public SELF isCloseToUtcNow(TemporalUnitOffset offset) {
     return isCloseTo(now(systemUTC()), offset);
+  }
+
+  /** {@inheritDoc} */
+  @Override
+  @CheckReturnValue
+  public SELF usingDefaultComparator() {
+    SELF self = super.usingDefaultComparator();
+    self.comparables = buildDefaultComparables();
+    return self;
+  }
+
+  private Comparables buildDefaultComparables() {
+    ChronoLocalDateTimeComparator defaultComparator = ChronoLocalDateTimeComparator.getInstance();
+    return new Comparables(new ComparatorBasedComparisonStrategy(defaultComparator, defaultComparator.description()));
   }
 
   private static Object[] convertToLocalDateTimeArray(String... dateTimesAsString) {
