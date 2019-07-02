@@ -16,7 +16,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Mockito.verify;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 
 import org.assertj.core.api.AbstractLocalDateTimeAssertBaseTest;
@@ -25,17 +24,14 @@ import org.junit.jupiter.api.Test;
 
 public class LocalDateTimeAssert_isBetween_with_String_parameters_Test extends AbstractLocalDateTimeAssertBaseTest {
 
-  private LocalDateTime before = now.minusSeconds(1);
-  private LocalDateTime after = now.plusSeconds(1);
-
   @Override
   protected LocalDateTimeAssert invoke_api_method() {
-    return assertions.isBetween(before.toString(), after.toString());
+    return assertions.isBetween(yesterday.toString(), tomorrow.toString());
   }
 
   @Override
   protected void verify_internal_effects() {
-    verify(getComparables(assertions)).assertIsBetween(getInfo(assertions), getActual(assertions), before, after, true, true);
+    verify(getComparables(assertions)).assertIsBetween(getInfo(assertions), getActual(assertions), yesterday, tomorrow, true, true);
   }
 
   @Test
@@ -43,7 +39,7 @@ public class LocalDateTimeAssert_isBetween_with_String_parameters_Test extends A
     // GIVEN
     String abc = "abc";
     // WHEN
-    Throwable thrown = catchThrowable(() -> assertions.isBetween(abc, after.toString()));
+    Throwable thrown = catchThrowable(() -> assertions.isBetween(abc, tomorrow.toString()));
     // THEN
     assertThat(thrown).isInstanceOf(DateTimeParseException.class);
   }
@@ -53,7 +49,7 @@ public class LocalDateTimeAssert_isBetween_with_String_parameters_Test extends A
     // GIVEN
     String abc = "abc";
     // WHEN
-    Throwable thrown = catchThrowable(() -> assertions.isBetween(before.toString(), abc));
+    Throwable thrown = catchThrowable(() -> assertions.isBetween(yesterday.toString(), abc));
     // THEN
     assertThat(thrown).isInstanceOf(DateTimeParseException.class);
   }

@@ -22,6 +22,8 @@ import org.assertj.core.internal.Comparables;
 public abstract class AbstractLocalDateTimeAssertBaseTest extends TemporalAssertBaseTest<LocalDateTimeAssert, LocalDateTime> {
 
   protected LocalDateTime now = LocalDateTime.now();
+  protected LocalDateTime yesterday = now.minusDays(1);
+  protected LocalDateTime tomorrow = now.plusDays(1);
 
   @Override
   protected void inject_internal_objects() {

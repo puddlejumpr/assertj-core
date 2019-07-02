@@ -72,7 +72,6 @@ public abstract class AbstractLocalDateTimeAssert<SELF extends AbstractLocalDate
    * @throws AssertionError if the actual {@code LocalDateTime} is not strictly before the given one.
    */
   public SELF isBefore(LocalDateTime other) {
-    Objects.instance().assertNotNull(info, actual);
     assertLocalDateTimeParameterIsNotNull(other);
     comparables.assertIsBefore(info, actual, other);
     return myself;
@@ -114,7 +113,6 @@ public abstract class AbstractLocalDateTimeAssert<SELF extends AbstractLocalDate
    * @throws AssertionError if the actual {@code LocalDateTime} is not before or equals to the given one.
    */
   public SELF isBeforeOrEqualTo(LocalDateTime other) {
-    Objects.instance().assertNotNull(info, actual);
     assertLocalDateTimeParameterIsNotNull(other);
     comparables.assertIsBeforeOrEqualTo(info, actual, other);
     return myself;
@@ -157,7 +155,6 @@ public abstract class AbstractLocalDateTimeAssert<SELF extends AbstractLocalDate
    * @throws AssertionError if the actual {@code LocalDateTime} is not after or equals to the given one.
    */
   public SELF isAfterOrEqualTo(LocalDateTime other) {
-    Objects.instance().assertNotNull(info, actual);
     assertLocalDateTimeParameterIsNotNull(other);
     comparables.assertIsAfterOrEqualTo(info, actual, other);
     return myself;
@@ -199,7 +196,6 @@ public abstract class AbstractLocalDateTimeAssert<SELF extends AbstractLocalDate
    * @throws AssertionError if the actual {@code LocalDateTime} is not strictly after the given one.
    */
   public SELF isAfter(LocalDateTime other) {
-    Objects.instance().assertNotNull(info, actual);
     assertLocalDateTimeParameterIsNotNull(other);
     comparables.assertIsAfter(info, actual, other);
     return myself;
@@ -227,11 +223,11 @@ public abstract class AbstractLocalDateTimeAssert<SELF extends AbstractLocalDate
     return isAfter(parse(localDateTimeAsString));
   }
 
-  public SELF isEqualTo(LocalDateTime expected) {
-    if (actual == null || expected == null) {
-      super.isEqualTo(expected);
+  public SELF isEqualTo(LocalDateTime other) {
+    if (actual == null || other == null) {
+      super.isEqualTo(other);
     } else {
-      comparables.assertEqual(info, actual, expected);
+      comparables.assertEqual(info, actual, other);
     }
     return myself;
   }
@@ -258,11 +254,11 @@ public abstract class AbstractLocalDateTimeAssert<SELF extends AbstractLocalDate
     return isEqualTo(parse(dateTimeAsString));
   }
 
-  public SELF isNotEqualTo(LocalDateTime expected) {
-    if (actual == null || expected == null) {
-      super.isNotEqualTo(expected);
+  public SELF isNotEqualTo(LocalDateTime other) {
+    if (actual == null || other == null) {
+      super.isNotEqualTo(other);
     } else {
-      comparables.assertNotEqual(info, actual, expected);
+      comparables.assertNotEqual(info, actual, other);
     }
     return myself;
   }
