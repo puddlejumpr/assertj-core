@@ -21,17 +21,14 @@ import org.assertj.core.api.OffsetDateTimeAssert;
 
 public class OffsetDateTimeAssert_isStrictlyBetween_Test extends AbstractOffsetDateTimeAssertBaseTest {
 
-  private OffsetDateTime before = now.minusSeconds(1);
-  private OffsetDateTime after = now.plusSeconds(1);
-
   @Override
   protected OffsetDateTimeAssert invoke_api_method() {
-    return assertions.isStrictlyBetween(before, after);
+    return assertions.isStrictlyBetween(yesterday, tomorrow);
   }
 
   @Override
   protected void verify_internal_effects() {
-    verify(comparables).assertIsBetween(getInfo(assertions), getActual(assertions), before, after, false, false);
+    verify(comparables).assertIsBetween(getInfo(assertions), getActual(assertions), yesterday, tomorrow, false, false);
   }
 
 }

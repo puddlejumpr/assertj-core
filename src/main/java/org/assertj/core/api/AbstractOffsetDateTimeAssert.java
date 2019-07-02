@@ -72,7 +72,6 @@ public abstract class AbstractOffsetDateTimeAssert<SELF extends AbstractOffsetDa
    * @throws AssertionError if the actual {@code OffsetDateTime} is not strictly before the given one.
    */
   public SELF isBefore(OffsetDateTime other) {
-    Objects.instance().assertNotNull(info, actual);
     assertOffsetDateTimeParameterIsNotNull(other);
     comparables.assertIsBefore(info, actual, other);
     return myself;
@@ -117,7 +116,6 @@ public abstract class AbstractOffsetDateTimeAssert<SELF extends AbstractOffsetDa
    * @throws AssertionError if the actual {@code OffsetDateTime} is not before or equals to the given one.
    */
   public SELF isBeforeOrEqualTo(OffsetDateTime other) {
-    Objects.instance().assertNotNull(info, actual);
     assertOffsetDateTimeParameterIsNotNull(other);
     comparables.assertIsBeforeOrEqualTo(info, actual, other);
     return myself;
@@ -162,7 +160,6 @@ public abstract class AbstractOffsetDateTimeAssert<SELF extends AbstractOffsetDa
    * @throws AssertionError if the actual {@code OffsetDateTime} is not after or equals to the given one.
    */
   public SELF isAfterOrEqualTo(OffsetDateTime other) {
-    Objects.instance().assertNotNull(info, actual);
     assertOffsetDateTimeParameterIsNotNull(other);
     comparables.assertIsAfterOrEqualTo(info, actual, other);
     return myself;
@@ -206,7 +203,6 @@ public abstract class AbstractOffsetDateTimeAssert<SELF extends AbstractOffsetDa
    * @throws AssertionError if the actual {@code OffsetDateTime} is not strictly after the given one.
    */
   public SELF isAfter(OffsetDateTime other) {
-    Objects.instance().assertNotNull(info, actual);
     assertOffsetDateTimeParameterIsNotNull(other);
     comparables.assertIsAfter(info, actual, other);
     return myself;
@@ -236,11 +232,11 @@ public abstract class AbstractOffsetDateTimeAssert<SELF extends AbstractOffsetDa
     return isAfter(parse(offsetDateTimeAsString));
   }
 
-  public SELF isEqualTo(OffsetDateTime expected) {
-    if (actual == null || expected == null) {
-      super.isEqualTo(expected);
+  public SELF isEqualTo(OffsetDateTime other) {
+    if (actual == null || other == null) {
+      super.isEqualTo(other);
     } else {
-      comparables.assertEqual(info, actual, expected);
+      comparables.assertEqual(info, actual, other);
     }
     return myself;
   }
@@ -295,11 +291,11 @@ public abstract class AbstractOffsetDateTimeAssert<SELF extends AbstractOffsetDa
     return isEqualTo(parse(dateTimeAsString));
   }
 
-  public SELF isNotEqualTo(OffsetDateTime expected) {
-    if (actual == null || expected == null) {
-      super.isNotEqualTo(expected);
+  public SELF isNotEqualTo(OffsetDateTime other) {
+    if (actual == null || other == null) {
+      super.isNotEqualTo(other);
     } else {
-      comparables.assertNotEqual(info, actual, expected);
+      comparables.assertNotEqual(info, actual, other);
     }
     return myself;
   }

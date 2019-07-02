@@ -21,6 +21,8 @@ import org.assertj.core.internal.Comparables;
 public abstract class AbstractOffsetDateTimeAssertBaseTest extends TemporalAssertBaseTest<OffsetDateTimeAssert, OffsetDateTime> {
 
   protected OffsetDateTime now = OffsetDateTime.now();
+  protected OffsetDateTime yesterday = now.minusDays(1);
+  protected OffsetDateTime tomorrow = now.plusDays(1);
 
   @Override
   protected void inject_internal_objects() {
