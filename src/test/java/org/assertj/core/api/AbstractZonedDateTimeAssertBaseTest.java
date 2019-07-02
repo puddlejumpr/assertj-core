@@ -21,6 +21,8 @@ import org.assertj.core.internal.Comparables;
 public abstract class AbstractZonedDateTimeAssertBaseTest extends TemporalAssertBaseTest<ZonedDateTimeAssert, ZonedDateTime> {
 
   protected ZonedDateTime now = ZonedDateTime.now();
+  protected ZonedDateTime yesterday = now.minusDays(1);
+  protected ZonedDateTime tomorrow = now.plusDays(1);
 
   @Override
   protected void inject_internal_objects() {

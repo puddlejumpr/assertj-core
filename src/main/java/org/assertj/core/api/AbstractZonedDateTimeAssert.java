@@ -60,7 +60,6 @@ public abstract class AbstractZonedDateTimeAssert<SELF extends AbstractZonedDate
    * @throws AssertionError if the actual {@code ZonedDateTime} is not strictly before the given one.
    */
   public SELF isBefore(ZonedDateTime other) {
-    Objects.instance().assertNotNull(info, actual);
     assertDateTimeParameterIsNotNull(other);
     comparables.assertIsBefore(info, actual, other);
     return myself;
@@ -104,7 +103,6 @@ public abstract class AbstractZonedDateTimeAssert<SELF extends AbstractZonedDate
    * @throws AssertionError if the actual {@code ZoneDateTime} is not before or equals to the given one.
    */
   public SELF isBeforeOrEqualTo(ZonedDateTime other) {
-    Objects.instance().assertNotNull(info, actual);
     assertDateTimeParameterIsNotNull(other);
     comparables.assertIsBeforeOrEqualTo(info, actual, other);
     return myself;
@@ -149,7 +147,6 @@ public abstract class AbstractZonedDateTimeAssert<SELF extends AbstractZonedDate
    * @throws AssertionError if the actual {@code ZonedDateTime} is not after or equals to the given one.
    */
   public SELF isAfterOrEqualTo(ZonedDateTime other) {
-    Objects.instance().assertNotNull(info, actual);
     assertDateTimeParameterIsNotNull(other);
     comparables.assertIsAfterOrEqualTo(info, actual, other);
     return myself;
@@ -193,7 +190,6 @@ public abstract class AbstractZonedDateTimeAssert<SELF extends AbstractZonedDate
    * @throws AssertionError if the actual {@code ZonedDateTime} is not strictly after the given one.
    */
   public SELF isAfter(ZonedDateTime other) {
-    Objects.instance().assertNotNull(info, actual);
     assertDateTimeParameterIsNotNull(other);
     comparables.assertIsAfter(info, actual, other);
     return myself;
