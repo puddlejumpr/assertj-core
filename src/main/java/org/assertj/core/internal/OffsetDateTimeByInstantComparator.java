@@ -32,7 +32,7 @@ public class OffsetDateTimeByInstantComparator extends DescribableComparator<Off
   }
 
   @Override
-  public int compare(OffsetDateTime o1, OffsetDateTime o2) {
-    return OffsetDateTime.timeLineOrder().compare(o1, o2);
+  public int compare(OffsetDateTime date1, OffsetDateTime date2) {
+    return OffsetDateTime.timeLineOrder().compare(date1, date2);
   }
 }

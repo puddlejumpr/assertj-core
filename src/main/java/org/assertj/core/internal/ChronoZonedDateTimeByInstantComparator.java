@@ -32,7 +32,7 @@ public class ChronoZonedDateTimeByInstantComparator extends DescribableComparato
   }
 
   @Override
-  public int compare(ChronoZonedDateTime<?> o1, ChronoZonedDateTime<?> o2) {
-    return ChronoZonedDateTime.timeLineOrder().compare(o1, o2);
+  public int compare(ChronoZonedDateTime<?> date1, ChronoZonedDateTime<?> date2) {
+    return ChronoZonedDateTime.timeLineOrder().compare(date1, date2);
   }
 }
