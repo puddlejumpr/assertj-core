@@ -12,8 +12,7 @@
  */
 package org.assertj.core.internal;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -21,7 +20,8 @@ import java.time.chrono.ChronoZonedDateTime;
 import java.time.chrono.JapaneseChronology;
 import java.time.chrono.JapaneseDate;
 
-import static org.assertj.core.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class ChronoZonedDateTimeByInstantComparatorTest {
 
@@ -39,7 +39,7 @@ class ChronoZonedDateTimeByInstantComparatorTest {
 
   @Test
   public void should_have_description() {
-    assertThat(comparator.description()).isEqualTo("ChronoZonedDateTimeByInstantComparator");
+    assertThat(comparator.description()).isEqualTo("ChronoZonedDateTime.timeLineOrder()");
   }
 
   @Test

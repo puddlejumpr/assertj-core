@@ -12,15 +12,14 @@
  */
 package org.assertj.core.internal;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDateTime;
 import java.time.chrono.JapaneseDate;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class ChronoLocalDateTimeComparatorTest {
 
@@ -38,7 +37,7 @@ class ChronoLocalDateTimeComparatorTest {
 
   @Test
   void should_have_description() {
-    assertThat(comparator.description()).isEqualTo("ChronoLocalDateTimeComparator");
+    assertThat(comparator.description()).isEqualTo("ChronoLocalDateTime.timeLineOrder()");
   }
 
   @Test

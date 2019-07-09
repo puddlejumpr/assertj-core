@@ -27,7 +27,7 @@ public class ChronoLocalDateTimeComparator extends DescribableComparator<ChronoL
 
   @Override
   public String description() {
-    return ChronoLocalDateTimeComparator.class.getSimpleName();
+    return "ChronoLocalDateTime.timeLineOrder()";
   }
 
   @Override

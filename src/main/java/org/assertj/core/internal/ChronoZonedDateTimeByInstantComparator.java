@@ -28,7 +28,7 @@ public class ChronoZonedDateTimeByInstantComparator extends DescribableComparato
 
   @Override
   public String description() {
-    return ChronoZonedDateTimeByInstantComparator.class.getSimpleName();
+    return "ChronoZonedDateTime.timeLineOrder()";
   }
 
   @Override

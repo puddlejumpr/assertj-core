@@ -28,7 +28,7 @@ public class OffsetDateTimeByInstantComparator extends DescribableComparator<Off
 
   @Override
   public String description() {
-    return OffsetDateTimeByInstantComparator.class.getSimpleName();
+    return "OffsetDateTime.timeLineOrder()";
   }
 
   @Override

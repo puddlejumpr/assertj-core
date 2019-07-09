@@ -37,7 +37,7 @@ class OffsetDateTimeByInstantComparatorTest {
 
   @Test
   public void should_have_description() {
-    assertThat(comparator.description()).isEqualTo("OffsetDateTimeByInstantComparator");
+    assertThat(comparator.description()).isEqualTo("OffsetDateTime.timeLineOrder()");
   }
 
   @Test
